@@ -10,6 +10,10 @@ body{
     background: #1a1a1a;
     margin-top: 12%;
     height: 60vh;
+    text-align: center;
+}
+.chat-video-camera{
+    height: 60vh;
 }
 
 .chat-title{
