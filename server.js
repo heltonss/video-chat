@@ -16,28 +16,29 @@ app.use('/js', express.static(__dirname + '/js'));
 const server = http.createServer(app).listen(3000);
 console.log('http server is up and running');
 
-const wss = new WebSocketServer({ server: server });
+const wss = new WebSocketServer({server: server });
 console.log('WebSocket server is up and running');
 
-wss.on('connection', function(client) {
+wss.on('connection', function (client) {
   console.log('A new websocket client was connected');
 
-  client.on('message', function(message) {
+  client.on('message', function (message) {
     wss.broadcast(message, client);
   });
 });
 
-wss.broadcast = function(data, exclude) {
+wss.broadcast = function (data, exclude) {
   let n = this.clients ? this.clients.length : 0;
   let client = null;
+  let i = 0
 
   if (n < 1) {
     return;
   }
   console.log("Broadcasting message to all " + n + " WebSocket clients.");
 
-  for (let i = 0; i < n; i++) {
-      client = this.client[i];
+  for (; i < n; i++) {
+      client = this.clients[i];
 
       if(client === exclude) continue;
       if(client.readyState === client.OPEN) client.send(data);
