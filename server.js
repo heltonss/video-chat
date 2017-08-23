@@ -13,7 +13,7 @@ app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 
-const server = http.createServer(app).listen(3000);
+const server = http.createServer(app).listen(process.env.PORT || 5000, () => console.log('it\'s ok'));
 console.log('http server is up and running');
 
 const wss = new WebSocketServer({server: server });
