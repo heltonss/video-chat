@@ -14,7 +14,7 @@ let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
 
-let wsc = new WebSocket('ws://localhost:3000');
+let wsc = new WebSocket('ws://' + location.host);
 console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
