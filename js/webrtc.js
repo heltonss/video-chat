@@ -14,14 +14,13 @@ let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
 
-let wsc = new WebSocket('wss://' + location.host);
+let wsc = new WebSocket('wss://' + location.hostname);
 console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
     { 'url': 'stun:stun.services.mozilla.com' },
     { 'url': 'stun:stun.l.google.com:19302' }
   ],
-  iceTransports: 'relay'
 };
 
 function pageReady() {

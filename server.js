@@ -4,9 +4,9 @@ const https = require('https');
 const app = express();
 const fs = require('fs');
 
-const pkey = fs.readFileSync('./ssl/server.key');
-const pcert = fs.readFileSync('./ssl/server.cert');
-const options = {key: pkey, cert: pcert};
+const pkey = fs.readFileSync('./ssl/key.pem');
+const pcert = fs.readFileSync('./ssl/crt.pem');
+const options = {key: pkey, cert: pcert, passphrase: '123456'};
 
 app.use(function(req, res, next) {
   if(req.headers['x-forwarded-proto']==='http') {
