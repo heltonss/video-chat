@@ -1,8 +1,19 @@
 const WebSocketServer = require('ws').Server;
 const express = require('express');
-const http = require('http');
+const https = require('http');
 const app = express();
 const fs = require('fs');
+
+const pkey = fs.readFileSync('./ssl/ssl.key');
+const pcert = fs.readFileSync('./ssl/ssl.crt');
+const options = {key: pkey, cert: pcert, passphrase: ''};
+
+app.use(function(req, res, next) {
+  if(req.headers['x-forwarded-proto']==='http') {
+    return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  next();
+});
 
 app.use(express.static('public'));
 app.use('/', express.static(__dirname + '/')); 
@@ -13,7 +24,7 @@ app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 
-const server = http.createServer(app).listen(process.env.PORT || 5000, () => console.log('it\'s ok'));
+const server = https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('it\'s ok'));
 console.log('http server is up and running');
 
 const wss = new WebSocketServer({server: server });
