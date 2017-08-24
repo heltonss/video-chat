@@ -1,8 +1,19 @@
 const WebSocketServer = require('ws').Server;
 const express = require('express');
-const http = require('http');
+const https = require('http');
 const app = express();
 const fs = require('fs');
+
+const pkey = fs.readFileSync('./ssl/key.pem'),
+pcert = fs.readFileSync('./ssl/cert.pem'),
+options = {key: pkey, cert: pcert, passphrase: '123456789'};
+
+app.use(function(req, res, next) {
+  if(req.headers['x-forwarded-proto']==='http') {
+    return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  next();
+});
 
 app.use(express.static('public'));
 app.use('/', express.static(__dirname + '/')); 
