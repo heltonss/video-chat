@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const pkey = fs.readFileSync('./ssl/ssl.key');
 const pcert = fs.readFileSync('./ssl/ssl.crt');
-const options = {key: pkey, cert: pcert, passphrase: ''};
+const options = {key: pkey, cert: pcert};
 
 app.use(function(req, res, next) {
   if(req.headers['x-forwarded-proto']==='http') {
