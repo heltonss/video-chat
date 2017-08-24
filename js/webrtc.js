@@ -13,6 +13,7 @@ let videoCallButton = null;
 let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
+document.getElementById('title').style.visibility = "hidden";
 
 let wsc = new WebSocket('wss://' + location.host);
 console.log(location.host);
@@ -62,7 +63,8 @@ function initiateCall() {
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
       createAndSendOffer();
-      document.getElementById('title').innerHTML = "S. BENTO SAPUCAI - SP 042"      
+      document.getElementById('title').innerHTML = "Simulação Egis";
+      document.getElementById('title').style.visibility = "visible";
     },
     function(error) {
       console.log('erro ao iniciar a chamada ' + error);
@@ -82,7 +84,8 @@ function answerCall() {
       localVideoElem.srcObject = stream;      
       peerConn.addStream(localVideoStream);
       createAndSendAnswer();
-      document.getElementById('title').innerHTML = "Agente Remoto" 
+      document.getElementById('title').innerHTML = "Agente Remoto";
+      document.getElementById('title').style.visibility = "visible";      
     },
     function(error) {
       console.log('erro ao enviar a resposta ' + error);
