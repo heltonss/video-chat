@@ -4,8 +4,8 @@ const https = require('https');
 const app = express();
 const fs = require('fs');
 
-const pkey = fs.readFileSync('./ssl/ssl.key');
-const pcert = fs.readFileSync('./ssl/ssl.crt');
+const pkey = fs.readFileSync('./ssl/key.pem');
+const pcert = fs.readFileSync('./ssl/cert.pem');
 const options = {key: pkey, cert: pcert};
 
 app.use(function(req, res, next) {
