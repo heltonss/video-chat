@@ -1,3 +1,9 @@
+*{
+    padding: 0;
+    margin: 0;
+    overflow: hidden
+}
+
 body{
     background: #2f2f2f;
 }
@@ -14,6 +20,9 @@ body{
 }
 .chat-video-camera{
     height: 60vh;
+}
+.chat-video-local{
+    margin-top: 70%;    
 }
 
 .chat-title{

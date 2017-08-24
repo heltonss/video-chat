@@ -1,4 +1,4 @@
-navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia;
 window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
 window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
@@ -18,15 +18,20 @@ let wsc = new WebSocket('wss://' + location.host);
 console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
-    { 'url': 'stun:stun.services.mozilla.com' },
-    { 'url': 'stun:stun.l.google.com:19302' }
+    { 'urls': 'stun:stun.services.mozilla.com' },
+    { 'urls': 'stun:stun.l.google.com:19302' }
   ],
+  urls: [
+    "stun:" + location.host,
+    "stun:" + location.host + '/posto.html'
+  ]
 };
 
 function pageReady() {
   if (navigator.getUserMedia) {
     videoCallButton = document.getElementById('videoCallButton');
     remoteVideoElem = document.getElementById('remoteVideoElem');
+    localVideoElem = document.getElementById('localVideoElem');
     endCallButton = document.getElementById('endCallButton');
 
     videoCallButton.removeAttribute('disabled');
@@ -54,6 +59,7 @@ function initiateCall() {
     },
     function(stream) {
       localVideoStream = stream
+      localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
       createAndSendOffer();
     },
@@ -65,7 +71,6 @@ function initiateCall() {
 
 function answerCall() {
   prepareCall();
-
   navigator.getUserMedia(
     {
       'audio': true,
@@ -73,8 +78,11 @@ function answerCall() {
     },
     function(stream) {
       localVideoStream = stream
+      localVideoElem.srcObject = stream;      
       peerConn.addStream(localVideoStream);
       createAndSendAnswer();
+      document.getElementById('title').innerHTML = "S. BENTO SAPUCAI - SP 042"
+      
     },
     function(error) {
       console.log('erro ao enviar a resposta ' + error);
@@ -145,7 +153,8 @@ function onIceCandidateHandler(evt) {
 function onAddStreamHandler(evt) {
   videoCallButton.setAttribute('disabled', true);
   endCallButton.removeAttribute('disabled');
-  remoteVideoElem.src = URL.createObjectURL(evt.stream);
+  remoteVideoElem.srcObject = evt.stream;
+  // remoteVideoElem.src = URL.createObjectURL(evt.stream);
 }
 
 function endCall() {
