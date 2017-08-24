@@ -62,6 +62,7 @@ function initiateCall() {
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
       createAndSendOffer();
+      document.getElementById('title').innerHTML = "S. BENTO SAPUCAI - SP 042"      
     },
     function(error) {
       console.log('erro ao iniciar a chamada ' + error);
@@ -81,8 +82,7 @@ function answerCall() {
       localVideoElem.srcObject = stream;      
       peerConn.addStream(localVideoStream);
       createAndSendAnswer();
-      document.getElementById('title').innerHTML = "S. BENTO SAPUCAI - SP 042"
-      
+      document.getElementById('title').innerHTML = "Agente Remoto" 
     },
     function(error) {
       console.log('erro ao enviar a resposta ' + error);
