@@ -20,7 +20,8 @@ let peerConnCfg = {
   'iceServers': [
     { 'url': 'stun:stun.services.mozilla.com' },
     { 'url': 'stun:stun.l.google.com:19302' }
-  ]
+  ],
+  iceTransports: 'relay'
 };
 
 function pageReady() {
