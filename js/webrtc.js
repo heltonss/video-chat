@@ -15,7 +15,7 @@ let peerConn = null;
 let wss = null, sslSrv = null;
 document.getElementById('title').style.visibility = "hidden";
 
-let wsc = new WebSocket('wss://' + location.host);
+let wsc = new WebSocket('wss://' + location.host + '/?id=cotia' );
 console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
