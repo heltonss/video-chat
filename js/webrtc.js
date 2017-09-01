@@ -21,10 +21,6 @@ let peerConnCfg = {
   'iceServers': [
     { 'urls': 'stun:stun.services.mozilla.com' },
     { 'urls': 'stun:stun.l.google.com:19302' }
-  ],
-  urls: [
-    "stun:" + location.host,
-    "stun:" + location.host + '/posto.html'
   ]
 };
 

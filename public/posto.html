@@ -15,12 +15,12 @@
             <img class="col-md-6 chat-logo" src="assets/images/sipe_logo.png" alt="logo sipe">
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
-            <div class="chat-video bg-primary">
+            <div class="chat-video">
                 <video class="chat-video-camera" id="remoteVideoElem" autoplay></video>
             </div>
             <div class="row">
                 <div class="chat-calls">
-                    <button id="videoCallButton" type="button" class="btn btn-default btn-lg col-md-6 col-md-offset-3 chat-btn">
+                    <button id="videoCallButton" type="button" disabled class="btn btn-default btn-lg col-md-6 col-md-offset-3 chat-btn">
                         <div class="col-md-1">
                             <span class="glyphicon glyphicon-earphone"></span> 
                         </div>
@@ -30,17 +30,22 @@
                         <div class="col-md-1 text-left">
                             <span class="glyphicon glyphicon-earphone"></span> 
                         </div>
-                        Atender
+                        finalizar
                     </button>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 ">
-            <h1 class="chat-title text-center">Simulado EGIS</h1>
+            <h1 id="title" class="chat-title text-center">Agente Remoto</h1>
+            <div class="chat-video-local">
+                <video width="280" height="280" class="chat-video-camera" id="localVideoElem" autoplay></video>
+            </div>
         </div>
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/adapter.js"></script>
+    <script src="/js/webrtc.js"></script>
 </body>
 
 </html>

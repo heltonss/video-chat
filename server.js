@@ -1,4 +1,4 @@
-const WebSocketServer = require('ws').Server;
+const WebSocketServer = require('ws');
 const express = require('express');
 const https = require('https');
 const app = express();
@@ -28,32 +28,26 @@ app.use('/js', express.static(__dirname + '/js'));
 const server = https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('it\'s ok'));
 console.log('http server is up and running');
 
-const wss = new WebSocketServer({server: server });
+const wss = new WebSocketServer.Server({server});
 console.log('WebSocket server is up and running');
 
-wss.on('connection', function (client) {
-  console.log('A new websocket client was connected');
 
-  client.on('message', function (message) {
-    wss.broadcast(message, client);
+// Broadcast to all.
+wss.broadcast = function broadcast(data) {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocketServer.OPEN) {
+      client.send(data);
+    }
+  });
+};
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(data) {
+    // Broadcast to everyone else.
+    wss.clients.forEach(function each(client) {
+      if (client !== ws && client.readyState === WebSocketServer.OPEN) {
+        client.send(data);
+      }
+    });
   });
 });
-
-wss.broadcast = function (data, exclude) {
-  let n = this.clients ? this.clients.length : 0;
-  let client = null;
-  let i = 0
-
-  if (n < 1) {
-    return;
-  }
-  console.log("Broadcasting message to all " + n + " WebSocket clients.");
-
-  for (; i < n; i++) {
-      client = this.clients[i];
-
-      if(client === exclude) continue;
-      if(client.readyState === client.OPEN) client.send(data);
-      else console.error('Error: the client state is ' + client.readyState);      
-  }
-};
