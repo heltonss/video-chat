@@ -33,6 +33,8 @@ function pageReady() {
     localVideoElem = document.getElementById('localVideoElem');
     endCallButton = document.getElementById('endCallButton');
 
+    getCityId();
+
     videoCallButton.removeAttribute('disabled');
     videoCallButton.addEventListener('click', initiateCall);
     endCallButton.addEventListener('click', function(evt) {
@@ -48,7 +50,15 @@ function prepareCall() {
   peerConn.onaddstream = onAddStreamHandler;
 }
 
-function requestOfCall() {
+function getCityId() {
+  let nav = document.getElementById('navigation');
+  nav.addEventListener('click', function (e) {
+    requestOfCall(e.target.id);
+  })
+  
+}
+
+function requestOfCall(city) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/server?id=' + city , true);
   xhr.send()
@@ -180,6 +190,8 @@ function endCall() {
 if (remoteVideoElem) {
   remoteVideoElem.src = ''
 }
+
+
 
 
 
