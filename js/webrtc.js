@@ -48,6 +48,12 @@ function prepareCall() {
   peerConn.onaddstream = onAddStreamHandler;
 }
 
+function requestOfCall() {
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/server?id=' + city , true);
+  xhr.send()
+}
+
 function initiateCall() {
   prepareCall();
 
@@ -68,7 +74,6 @@ function initiateCall() {
       console.log('erro ao iniciar a chamada ' + error);
     }
   );
-  requestOfCall();
 }
 
 function answerCall() {
@@ -174,12 +179,6 @@ function endCall() {
 
 if (remoteVideoElem) {
   remoteVideoElem.src = ''
-}
-
-function requestOfCall() {
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/sao-bento-sapucai', true);
-  xhr.send()
 }
 
 

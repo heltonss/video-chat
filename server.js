@@ -29,8 +29,8 @@ app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 
 let cityCall;
-app.post('/sao-bento-sapucai', function (req, res, next) {
-  cityCall = req.url.slice(1)
+app.post('/server', function (req, res, next) {
+  cityCall = req.url.slice(11)
   console.log('url solicited ' + cityCall);
 });
 
