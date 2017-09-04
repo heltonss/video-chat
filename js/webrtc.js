@@ -15,7 +15,9 @@ let peerConn = null;
 let wss = null, sslSrv = null;
 document.getElementById('title').style.visibility = "hidden";
 
-let wsc = new WebSocket('wss://' + location.host + '/?id=cotia' );
+let urlOfClient = new URL(document.URL)
+
+let wsc = new WebSocket('wss://' + location.host + '/' + urlOfClient.searchParams.get('id'));
 console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
@@ -59,13 +61,14 @@ function initiateCall() {
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
       createAndSendOffer();
-      document.getElementById('title').innerHTML = "Simulação Egis";
-      document.getElementById('title').style.visibility = "visible";
+      // document.getElementById('title').innerHTML = "Simulação Egis";
+      // document.getElementById('title').style.visibility = "visible";
     },
     function(error) {
       console.log('erro ao iniciar a chamada ' + error);
     }
   );
+  requestOfCall();
 }
 
 function answerCall() {
@@ -80,8 +83,8 @@ function answerCall() {
       localVideoElem.srcObject = stream;      
       peerConn.addStream(localVideoStream);
       createAndSendAnswer();
-      document.getElementById('title').innerHTML = "Agente Remoto";
-      document.getElementById('title').style.visibility = "visible";      
+      // document.getElementById('title').innerHTML = "Agente Remoto";
+      // document.getElementById('title').style.visibility = "visible";      
     },
     function(error) {
       console.log('erro ao enviar a resposta ' + error);
@@ -172,5 +175,13 @@ function endCall() {
 if (remoteVideoElem) {
   remoteVideoElem.src = ''
 }
+
+function requestOfCall() {
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/sao-bento-sapucai', true);
+  xhr.send()
+}
+
+
 
 window.onload = pageReady();

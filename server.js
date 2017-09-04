@@ -28,6 +28,12 @@ app.use('/js', express.static(__dirname + '/node_modules/webrtc-adapter/out'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/js', express.static(__dirname + '/js'));
 
+let cityCall;
+app.post('/sao-bento-sapucai', function (req, res, next) {
+  cityCall = req.url.slice(1)
+  console.log('url solicited ' + cityCall);
+});
+
 const server = https.createServer(options, app).listen(process.env.PORT || 5000);
 console.log('http server is up and running');
 
@@ -35,8 +41,7 @@ const wss = new WebSocketServer.Server({ server });
 console.log('WebSocket server is up and running');
 
 
-let userConnecteds = []
-let webSockets = [];
+let userLoggeds = [];
 let connectCounter = 0;
 // Broadcast to all.
 wss.broadcast = function broadcast(data) {
@@ -51,19 +56,38 @@ wss.on('connection', function connection(ws, req) {
   console.log('New user logged ');
   console.log('Number of user logged ' + ++connectCounter);
 
-  let regex = /(.)[^\?id=]+/;
-  let userId = regex.exec(req.url)
+  let getUrlUserLogged = req.url
+  let userId = getUrlUserLogged.slice(1) === 'null' ? 'agente-remoto' : getUrlUserLogged.slice(1);
+
+  ws.id = userId
   console.log('id of user ' + userId)
 
+  userLoggeds.push(ws)
+  // console.log('number of users inner array clients ' + clients.length)
 
 
   ws.on('message', function incoming(data) {
+    console.log('calling ' + cityCall)
     // Broadcast to everyone else.
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocketServer.OPEN) {
-        client.send(data);
+    // console.log(' info data ' + util.inspect(data))
+
+    for (let i = 0; i < userLoggeds.length; i++) {
+      if (userLoggeds[i] !== ws && userLoggeds[i].readyState === WebSocketServer.OPEN) {
+        if (userLoggeds[i].id === cityCall || userLoggeds[i].id === 'agente-remoto') {
+          console.log('start chat with ' + userLoggeds[i].id);
+          userLoggeds[i].send(data);
+        }
       }
-    });
+    }
+
+
+    //   wss.clients.forEach(function each(client) {
+    //     if (client !== ws && client.readyState === WebSocketServer.OPEN) {
+    //       if( client.id === cityCall)
+    //         console.log('start chat with ' + client.id);
+    //         client.send(data);
+    //       }
+    //   });
   });
 
   ws.on('close', function close() {
