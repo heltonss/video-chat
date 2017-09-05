@@ -2,7 +2,7 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || 
 window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate;
 window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
-window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition 
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition
   || window.msSpeechRecognition || window.oSpeechRecognition;
 
 
@@ -37,7 +37,7 @@ function pageReady() {
 
     videoCallButton.removeAttribute('disabled');
     videoCallButton.addEventListener('click', initiateCall);
-    endCallButton.addEventListener('click', function(evt) {
+    endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
     });
   } else {
@@ -55,24 +55,23 @@ function getCityId() {
   nav.addEventListener('click', function (e) {
     requestOfCall(e.target.id);
   })
-  
+
 }
 
 function requestOfCall(city) {
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/server?id=' + city , true);
+  xhr.open('POST', '/server?id=' + city, true);
   xhr.send()
 }
 
 function initiateCall() {
   prepareCall();
-
   navigator.getUserMedia(
     {
       'audio': true,
       'video': true
     },
-    function(stream) {
+    function (stream) {
       localVideoStream = stream
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
@@ -80,7 +79,7 @@ function initiateCall() {
       // document.getElementById('title').innerHTML = "Simulação Egis";
       // document.getElementById('title').style.visibility = "visible";
     },
-    function(error) {
+    function (error) {
       console.log('erro ao iniciar a chamada ' + error);
     }
   );
@@ -88,40 +87,56 @@ function initiateCall() {
 
 function answerCall() {
   prepareCall();
-  navigator.getUserMedia(
-    {
-      'audio': true,
-      'video': true
-    },
-    function(stream) {
-      localVideoStream = stream
-      localVideoElem.srcObject = stream;      
-      peerConn.addStream(localVideoStream);
-      createAndSendAnswer();
-      // document.getElementById('title').innerHTML = "Agente Remoto";
-      // document.getElementById('title').style.visibility = "visible";      
-    },
-    function(error) {
-      console.log('erro ao enviar a resposta ' + error);
-    }
-  );
+  let conf = window.confirm('Chamada do agente remoto');
+  if (conf == true) {
+    navigator.getUserMedia(
+      {
+        'audio': true,
+        'video': true
+      },
+      function (stream) {
+        localVideoStream = stream
+        localVideoElem.srcObject = stream;
+        peerConn.addStream(localVideoStream);
+        createAndSendAnswer();
+        // document.getElementById('title').innerHTML = "Agente Remoto";
+        // document.getElementById('title').style.visibility = "visible";      
+      },
+      function (error) {
+        console.log('erro ao enviar a resposta ' + error);
+      }
+    );
+  }else{
+    return;
+  }
 }
 
 
 wsc.onmessage = function (evt) {
   let signal = null;
-  if (!peerConn) answerCall();
+  if (!peerConn) {
+    answerCall();
+  }
+
   signal = JSON.parse(evt.data);
   if (signal.sdp) {
     peerConn.setRemoteDescription(new RTCSessionDescription(signal.sdp));
-  } 
+  }
   else if (signal.candidate) {
     peerConn.addIceCandidate(new RTCIceCandidate(signal.candidate));
-  } 
+  }
   else if (signal.closeConnection) {
     endCall();
   }
 };
+
+function ok() {
+  continue
+}
+
+function cancel() {
+  return
+}
 
 function createAndSendOffer() {
   peerConn.createOffer(
@@ -129,36 +144,36 @@ function createAndSendOffer() {
       let off = new RTCSessionDescription(offer);
       peerConn.setLocalDescription(
         new RTCSessionDescription(off),
-        function() {
-          wsc.send(JSON.stringify({'sdp': off }));
+        function () {
+          wsc.send(JSON.stringify({ 'sdp': off }));
         },
-        function(error) {
+        function (error) {
           console.log(error);
         }
       );
     },
-    function(error) {
+    function (error) {
       console.log('erro ao criar a conexão e enviar offer ' + error);
     }
   );
 }
 
 function createAndSendAnswer() {
-  peerConn.createAnswer(function(answer) {
+  peerConn.createAnswer(function (answer) {
     let ans = new RTCSessionDescription(answer);
     peerConn.setLocalDescription(
       ans,
-      function() {
-        wsc.send(JSON.stringify({'sdp': ans }));
+      function () {
+        wsc.send(JSON.stringify({ 'sdp': ans }));
       },
-      function(error) {
+      function (error) {
         console.log('erro ao criar resposta' + error);
       }
     );
   },
-  function (error) {
-    console.log(error);
-  });
+    function (error) {
+      console.log(error);
+    });
 }
 
 
@@ -179,12 +194,24 @@ function endCall() {
   peerConn = null;
   videoCallButton.removeAttribute('disabled');
   endCallButton.setAttributte('disabled', true);
-  if(localVideoStream){
+  if (localVideoStream) {
 
-    localVideoStream.getTracks().forEach(function(track) {
+    localVideoStream.getTracks().forEach(function (track) {
       track.stop();
     });
   }
+}
+
+function notifyCall() {
+  Notification.requestPermission(function () {
+    Notification.permission = 'granted';
+    let notification = new Notification('Agente Remoto', {
+      body: 'Atenda essa chamada'
+    });
+    notification.onclick = function () {
+      window.open('https://localhost:5000/posto.html?id=sao-bento-sapucai');
+    }
+  })
 }
 
 if (remoteVideoElem) {

@@ -70,8 +70,8 @@ wss.on('connection', function connection(ws, req) {
     console.log('calling ' + cityCall)
     // Broadcast to everyone else.
     // console.log(' info data ' + util.inspect(data))
-
-    for (let i = 0; i < userLoggeds.length; i++) {
+    let size = userLoggeds.length;
+    for (let i = 0; i < size; i++) {
       if (userLoggeds[i] !== ws && userLoggeds[i].readyState === WebSocketServer.OPEN) {
         if (userLoggeds[i].id === cityCall || userLoggeds[i].id === 'agente-remoto') {
           console.log('start chat with ' + userLoggeds[i].id);
