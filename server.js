@@ -63,8 +63,6 @@ wss.on('connection', function connection(ws, req) {
   console.log('id of user ' + userId)
 
   userLoggeds.push(ws)
-  // console.log('number of users inner array clients ' + clients.length)
-
 
   ws.on('message', function incoming(data) {
     console.log('calling ' + cityCall)
