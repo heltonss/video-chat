@@ -44,6 +44,7 @@ function pageReady() {
     alert('seu navegador não suporta stream de video');
   }
 }
+
 function prepareCall() {
   peerConn = new RTCPeerConnection(peerConnCfg);
   peerConn.onicecandidate = onIceCandidateHandler;
@@ -129,14 +130,6 @@ wsc.onmessage = function (evt) {
     endCall();
   }
 };
-
-function ok() {
-  continue
-}
-
-function cancel() {
-  return
-}
 
 function createAndSendOffer() {
   peerConn.createOffer(
