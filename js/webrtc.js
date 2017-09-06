@@ -35,8 +35,6 @@ function pageReady() {
 
     getCityId();
 
-    videoCallButton.removeAttribute('disabled');
-    videoCallButton.addEventListener('click', initiateCall);
     endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
     });
@@ -77,8 +75,6 @@ function initiateCall() {
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
       createAndSendOffer();
-      // document.getElementById('title').innerHTML = "Simulação Egis";
-      // document.getElementById('title').style.visibility = "visible";
     },
     function (error) {
       console.log('erro ao iniciar a chamada ' + error);
@@ -99,9 +95,7 @@ function answerCall() {
         localVideoStream = stream
         localVideoElem.srcObject = stream;
         peerConn.addStream(localVideoStream);
-        createAndSendAnswer();
-        // document.getElementById('title').innerHTML = "Agente Remoto";
-        // document.getElementById('title').style.visibility = "visible";      
+        createAndSendAnswer();  
       },
       function (error) {
         console.log('erro ao enviar a resposta ' + error);
@@ -176,16 +170,13 @@ function onIceCandidateHandler(evt) {
 }
 
 function onAddStreamHandler(evt) {
-  videoCallButton.setAttribute('disabled', true);
-  endCallButton.removeAttribute('disabled');
+
   remoteVideoElem.srcObject = evt.stream;
-  // remoteVideoElem.src = URL.createObjectURL(evt.stream);
 }
 
 function endCall() {
   peerConn.close();
   peerConn = null;
-  videoCallButton.removeAttribute('disabled');
   endCallButton.setAttributte('disabled', true);
   if (localVideoStream) {
 

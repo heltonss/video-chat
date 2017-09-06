@@ -39,6 +39,10 @@ body{
     margin-top: 3%
 }
 
+.chat-icon{
+    font-size: 1.8rem;
+}
+
 .chat-btn{
     margin-bottom: 1%;
 }
