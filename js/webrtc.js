@@ -11,6 +11,7 @@ let localVideoElem = null;
 let localVideoStream = null;
 let videoCallButton = null;
 let handleVideo = null;
+let handleAudio = null;
 let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
@@ -29,13 +30,26 @@ let peerConnCfg = {
 
 function pageReady() {
   if (navigator.getUserMedia) {
+
     videoCallButton = document.getElementById('videoCallButton');
     remoteVideoElem = document.getElementById('remoteVideoElem');
-    localVideoElem = document.getElementById('localVideoElem');
-    endCallButton = document.getElementById('endCallButton');
-    handleVideo = document.getElementById('handleVideo');
+    localVideoElem  = document.getElementById('localVideoElem');
+    endCallButton   = document.getElementById('endCallButton');
+    handleVideo     = document.getElementById('handleVideo');
+    handleAudio     = document.getElementById('handleAudio');
 
     getCityId();
+
+    handleAudio.addEventListener('click', function (evt) {
+      if(handleAudio.value === 'muted'){
+        handleAudio.innerHTML = '<span class="glyphicon glyphicon glyphicon-volume-up"></span> Audio';
+        handleAudio.value = 'audio';
+      } else {
+        handleAudio.innerHTML = '<span class="glyphicon glyphicon glyphicon-volume-off"></span> Mudo';        
+        handleAudio.value = 'muted';        
+      }
+      localVideoStream.getAudioTracks()[0].enabled = !(localVideoStream.getAudioTracks()[0].enabled);
+    })
 
     handleVideo.addEventListener('click', function (evt) {
       localVideoStream.getVideoTracks()[0].enabled = !(localVideoStream.getVideoTracks()[0].enabled);
@@ -43,6 +57,7 @@ function pageReady() {
     endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
     });
+    
   } else {
     alert('seu navegador não suporta stream de video');
   }
@@ -79,8 +94,6 @@ function initiateCall() {
       localVideoStream = stream
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
-      
-    
       createAndSendOffer();
     },
     function (error) {
