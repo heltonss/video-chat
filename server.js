@@ -60,25 +60,35 @@ wss.on('connection', function connection(ws, req) {
   let userId = getUrlUserLogged.slice(1) === 'null' ? 'agente-remoto' : getUrlUserLogged.slice(1);
 
   ws.id = userId
-  console.log('id of user ' + userId)
+  // console.log('id of user ' + userId)
 
   userLoggeds.push(ws)
 
   ws.on('message', function incoming(data) {
-    console.log('calling ' + cityCall)
-    // Broadcast to everyone else.
-    // console.log(' info data ' + util.inspect(data))
-    let size = userLoggeds.length;
-    for (let i = 0; i < size; i++) {
-      if (userLoggeds[i] !== ws && userLoggeds[i].readyState === WebSocketServer.OPEN) {
-        if (userLoggeds[i].id === cityCall || userLoggeds[i].id === 'agente-remoto') {
-          console.log('start chat with ' + userLoggeds[i].id);
-          userLoggeds[i].send(data);
+    try {
+      let size = userLoggeds.length;
+      for (let i = 0; i < size; i++) {
+        if (userLoggeds[i] !== ws && userLoggeds[i].readyState === WebSocketServer.OPEN) {
+          if (userLoggeds[i].id === cityCall || userLoggeds[i].id === 'agente-remoto') {
+            // console.log('start chat with ' + userLoggeds[i].id);
+            userLoggeds[i].send(data);
+          }
         }
       }
+    } catch (error) {
+      let isExistFileLog = fs.existsSync('log/error-message.txt');
+      if (isExistFileLog) {
+        fs.appendFile('log/error-message.txt', error + "\r\n", (err) => {
+          if (err) throw err;
+          console.log('New data was add to the log error message');
+        });
+      } else {
+        fs.writeFile('log/error-message.txt', error + "\r\n", (err) => {
+          if (err) throw err;
+          console.log('A new log of error message was created');
+        });
+      }
     }
-
-
     //   wss.clients.forEach(function each(client) {
     //     if (client !== ws && client.readyState === WebSocketServer.OPEN) {
     //       if( client.id === cityCall)

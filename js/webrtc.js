@@ -205,9 +205,7 @@ function onAddStreamHandler(evt) {
 function endCall() {
   peerConn.close();
   peerConn = null;
-  endCallButton.setAttributte('disabled', true);
   if (localVideoStream) {
-
     localVideoStream.getTracks().forEach(function (track) {
       track.stop();
     });
