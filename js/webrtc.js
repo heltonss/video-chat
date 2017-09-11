@@ -38,6 +38,8 @@ function pageReady() {
     handleVideo     = document.getElementById('handleVideo');
     handleAudio     = document.getElementById('handleAudio');
 
+    applyAttributeDisabledButtons();
+
     getCityId();
 
     handleAudio.addEventListener('click', function (evt) {
@@ -54,8 +56,14 @@ function pageReady() {
     handleVideo.addEventListener('click', function (evt) {
       localVideoStream.getVideoTracks()[0].enabled = !(localVideoStream.getVideoTracks()[0].enabled);
     })
+
     endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
+      localVideoElem.src  = ''; 
+      remoteVideoElem.src = '';
+      localVideoStream.getVideoTracks()[0].stop();
+      localVideoStream.getAudioTracks()[0].stop();
+      applyAttributeDisabledButtons() 
     });
     
   } else {
@@ -67,6 +75,7 @@ function prepareCall() {
   peerConn = new RTCPeerConnection(peerConnCfg);
   peerConn.onicecandidate = onIceCandidateHandler;
   peerConn.onaddstream = onAddStreamHandler;
+  removeAttributeDisabledButtons()
 }
 
 function getCityId() {
@@ -132,7 +141,6 @@ wsc.onmessage = function (evt) {
   if (!peerConn) {
     answerCall();
   }
-
   signal = JSON.parse(evt.data);
   if (signal.sdp) {
     peerConn.setRemoteDescription(new RTCSessionDescription(signal.sdp));
@@ -218,12 +226,16 @@ function notifyCall() {
   })
 }
 
-if (remoteVideoElem) {
-  remoteVideoElem.src = ''
+function applyAttributeDisabledButtons() {
+  handleAudio.setAttribute('disabled', '')
+  handleVideo.setAttribute('disabled', '')
+  endCallButton.setAttribute('disabled', '')
 }
 
-
-
-
+function removeAttributeDisabledButtons() {
+  handleAudio.removeAttribute('disabled');
+  handleVideo.removeAttribute('disabled');
+  endCallButton.removeAttribute('disabled');
+}
 
 window.onload = pageReady();
