@@ -10,6 +10,7 @@ let remoteVideoElem = null;
 let localVideoElem = null;
 let localVideoStream = null;
 let videoCallButton = null;
+let handleVideo = null;
 let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
@@ -32,9 +33,13 @@ function pageReady() {
     remoteVideoElem = document.getElementById('remoteVideoElem');
     localVideoElem = document.getElementById('localVideoElem');
     endCallButton = document.getElementById('endCallButton');
+    handleVideo = document.getElementById('handleVideo');
 
     getCityId();
 
+    handleVideo.addEventListener('click', function (evt) {
+      localVideoStream.getVideoTracks()[0].enabled = !(localVideoStream.getVideoTracks()[0].enabled);
+    })
     endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
     });
@@ -74,6 +79,8 @@ function initiateCall() {
       localVideoStream = stream
       localVideoElem.srcObject = stream;
       peerConn.addStream(localVideoStream);
+      
+    
       createAndSendOffer();
     },
     function (error) {
@@ -95,13 +102,13 @@ function answerCall() {
         localVideoStream = stream
         localVideoElem.srcObject = stream;
         peerConn.addStream(localVideoStream);
-        createAndSendAnswer();  
+        createAndSendAnswer();
       },
       function (error) {
         console.log('erro ao enviar a resposta ' + error);
       }
     );
-  }else{
+  } else {
     return;
   }
 }
