@@ -25,7 +25,7 @@ console.log(location.host);
 let peerConnCfg = {
   'iceServers': [
     { 'urls': 'stun:stun.services.mozilla.com' },
-    { 'urls': 'stun:stun.l.google.com:19302' }
+    { 'urls': 'stun:stun.l.google.com:19302' },
     { 'urls': 'stun:'+ location.hostname + ':5000' }
   ]
 };
