@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/heltonss/video-chat#readme",
   "devDependencies": {
+    "babel-minify": "^0.2.0",
     "nodemon": "^1.11.0"
   },
   "dependencies": {

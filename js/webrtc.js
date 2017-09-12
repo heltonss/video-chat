@@ -15,9 +15,10 @@ let handleAudio = null;
 let endCallButton = null;
 let peerConn = null;
 let wss = null, sslSrv = null;
-document.getElementById('title').style.visibility = "hidden";
 
 let urlOfClient = new URL(document.URL)
+
+document.getElementById('title').innerHTML = urlOfClient.searchParams.get('id');
 
 let wsc = new WebSocket('wss://' + location.host + '/' + urlOfClient.searchParams.get('id'));
 console.log(location.host);
@@ -33,22 +34,22 @@ function pageReady() {
 
     videoCallButton = document.getElementById('videoCallButton');
     remoteVideoElem = document.getElementById('remoteVideoElem');
-    localVideoElem  = document.getElementById('localVideoElem');
-    endCallButton   = document.getElementById('endCallButton');
-    handleVideo     = document.getElementById('handleVideo');
-    handleAudio     = document.getElementById('handleAudio');
+    localVideoElem = document.getElementById('localVideoElem');
+    endCallButton = document.getElementById('endCallButton');
+    handleVideo = document.getElementById('handleVideo');
+    handleAudio = document.getElementById('handleAudio');
 
     applyAttributeDisabledButtons();
-
     getCityId();
+    setIdButtonCityCall()
 
     handleAudio.addEventListener('click', function (evt) {
-      if(handleAudio.value === 'muted'){
+      if (handleAudio.value === 'muted') {
         handleAudio.innerHTML = '<span class="glyphicon glyphicon glyphicon-volume-up"></span> Audio';
         handleAudio.value = 'audio';
       } else {
-        handleAudio.innerHTML = '<span class="glyphicon glyphicon glyphicon-volume-off"></span> Mudo';        
-        handleAudio.value = 'muted';        
+        handleAudio.innerHTML = '<span class="glyphicon glyphicon glyphicon-volume-off"></span> Mudo';
+        handleAudio.value = 'muted';
       }
       localVideoStream.getAudioTracks()[0].enabled = !(localVideoStream.getAudioTracks()[0].enabled);
     })
@@ -59,13 +60,13 @@ function pageReady() {
 
     endCallButton.addEventListener('click', function (evt) {
       wsc.send(JSON.stringify({ 'closeConnection': true }));
-      localVideoElem.src  = ''; 
+      localVideoElem.src = '';
       remoteVideoElem.src = '';
       localVideoStream.getVideoTracks()[0].stop();
       localVideoStream.getAudioTracks()[0].stop();
-      applyAttributeDisabledButtons() 
+      applyAttributeDisabledButtons()
     });
-    
+
   } else {
     alert('seu navegador não suporta stream de video');
   }
@@ -83,7 +84,12 @@ function getCityId() {
   nav.addEventListener('click', function (e) {
     requestOfCall(e.target.id);
   })
+}
 
+function setIdButtonCityCall() {
+  let url = new URL(location.href);
+  let id  = url.searchParams.get('id');
+  document.getElementById('city').id = id
 }
 
 function requestOfCall(city) {

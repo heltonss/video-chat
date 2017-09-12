@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="css/style.css" rel="stylesheet">
-    <link href="css/notie.css" rel="stylesheet">
 </head>
 
 <body class="container-fluid">
@@ -20,24 +19,33 @@
                 <video class="chat-video-camera" id="remoteVideoElem" autoplay></video>
             </div>
             <div class="row">
-                <div class="chat-calls">
-                    <button id="videoCallButton" type="button" disabled class="btn btn-default btn-lg col-md-6 col-md-offset-3 chat-btn">
-                        <div class="col-md-1">
+                <div class="chat-calls text-center">
+                    <div class="btn-group">
+                        <button id="handleAudio" value="muted" type="button" class="btn  btn-lg btn-warning chat-btn">
+                            <span class="glyphicon glyphicon glyphicon-volume-off"></span> 
+                            Mudo
+                        </button>
+                        <button id="handleVideo" type="button" class="btn btn-warning btn-lg  chat-btn">
+                            <span class="glyphicon glyphicon-facetime-video chat-icon"></span> 
+                            Video
+                        </button>
+                        <button id="endCallButton" type="button" class="btn btn-danger btn-lg  chat-btn">
                             <span class="glyphicon glyphicon-earphone"></span> 
+                            Encerrar
+                        </button>
+                            <div id="navigation" >
+                                <button id="city" onclick="initiateCall()" type="button" class="btn btn-primary btn-lg chat-btn">
+                                    <span class="glyphicon glyphicon-earphone"></span> 
+                                    Chamar
+                                </button>
+                            </div>
                         </div>
-                        Chamar
-                    </button>
-                    <button id="endCallButton" type="button" class="btn btn-default btn-lg col-md-6 col-md-offset-3 chat-btn">
-                        <div class="col-md-1 text-left">
-                            <span class="glyphicon glyphicon-earphone"></span> 
-                        </div>
-                        finalizar
-                    </button>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 ">
-            <h1 id="title" class="chat-title text-center">Posto Fiscal</h1>
+            <h2 id="title" hidden class="chat-title text-center">Agente Remoto</h2>>
+            <h2 class="chat-title text-center">Agente Remoto</h2>>
             <div class="chat-video-local">
                 <video width="280" height="280" class="chat-video-camera" id="localVideoElem" autoplay></video>
             </div>
@@ -45,7 +53,6 @@
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/library/notie.min.js"></script>
     <script src="/js/adapter.js"></script>
     <script src="/js/webrtc.js"></script>
 </body>

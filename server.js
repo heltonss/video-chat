@@ -31,7 +31,7 @@ app.use('/js', express.static(__dirname + '/js'));
 let cityCall;
 app.post('/server', function (req, res, next) {
   cityCall = req.url.slice(11)
-  console.log('url solicited ' + cityCall);
+  console.log('city call ' + cityCall)
 });
 
 const server = https.createServer(options, app).listen(process.env.PORT || 5000);
@@ -60,7 +60,7 @@ wss.on('connection', function connection(ws, req) {
   let userId = getUrlUserLogged.slice(1) === 'null' ? 'agente-remoto' : getUrlUserLogged.slice(1);
 
   ws.id = userId
-  // console.log('id of user ' + userId)
+  console.log('id of user ' + userId)
 
   userLoggeds.push(ws)
 
@@ -70,7 +70,7 @@ wss.on('connection', function connection(ws, req) {
       for (let i = 0; i < size; i++) {
         if (userLoggeds[i] !== ws && userLoggeds[i].readyState === WebSocketServer.OPEN) {
           if (userLoggeds[i].id === cityCall || userLoggeds[i].id === 'agente-remoto') {
-            // console.log('start chat with ' + userLoggeds[i].id);
+            console.log('start chat with ' + userLoggeds[i].id);
             userLoggeds[i].send(data);
           }
         }

@@ -19,7 +19,7 @@
                 <video class="chat-video-camera" id="remoteVideoElem" autoplay></video>
             </div>
             <div class="row">
-                <div id="navigation" class="chat-calls text-center">
+                <div class="chat-calls text-center">
                     <div class="btn-group">
                         <button id="handleAudio" value="muted" type="button" class="btn  btn-lg btn-warning chat-btn">
                             <span class="glyphicon glyphicon glyphicon-volume-off"></span> 
@@ -33,20 +33,18 @@
                             <span class="glyphicon glyphicon-earphone"></span> 
                             Encerrar
                         </button>
-                        <button id="cotia" onclick="initiateCall()" type="button" class="btn btn-primary btn-lg chat-btn">
-                            <span class="glyphicon glyphicon-earphone"></span> 
-                            Chamar
-                        </button>
-                    </div>
+                        <div id="navigation" >
+                            <button id="city" onclick="initiateCall()" type="button" class="btn btn-primary btn-lg chat-btn">
+                                <span class="glyphicon glyphicon-earphone"></span> 
+                                Chamar
+                            </button>
+                        </div>
+                        </div>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 ">
-            <h2 id="title" class="chat-title text-center">Agente Remoto</h2>
-            <!-- <div>
-                <button id="cotia" onclick="initiateCall()" type="button" class="btn btn-block btn-primary">Cotia</button>
-                <button id="sao-bento-sapucai" onclick="initiateCall()" type="button" class="btn btn-block btn-primary">São Bento do Sapucai</button> 
-            </div> -->
+            <h2 id="title" class="chat-title text-center">Agente Remoto</h2>>
             <div class="chat-video-local">
                 <video width="280" height="280" class="chat-video-camera" id="localVideoElem" autoplay></video>
             </div>
